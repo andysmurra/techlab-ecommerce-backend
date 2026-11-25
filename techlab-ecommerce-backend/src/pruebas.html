@@ -1,0 +1,162 @@
+### 1. Listar todos los productos (200 OK)
+GET http://localhost:8080/api/productos
+Accept: application/json
+
+###
+
+### 2. Obtener un producto por ID existente (200 OK)
+GET http://localhost:8080/api/productos/1
+Accept: application/json
+
+###
+
+### 3. Buscar producto inexistente (404 Not Found)
+GET http://localhost:8080/api/productos/999
+Accept: application/json
+
+###
+
+### 4. Buscar productos por nombre (200 OK)
+GET http://localhost:8080/api/productos?nombre=Cafe
+Accept: application/json
+
+###
+
+### 5. Listar productos con stock bajo (200 OK)
+GET http://localhost:8080/api/productos/stock-bajo?limite=5
+Accept: application/json
+
+###
+
+### 6. Crear un nuevo producto (201 Created)
+POST http://localhost:8080/api/productos
+Content-Type: application/json
+
+{
+  "nombre": "Café de Especialidad 250g",
+  "descripcion": "Granos seleccionados tueste medio",
+  "precio": 18500.0,
+  "categoriaId": 1,
+  "imagenUrl": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e",
+  "stock": 25
+}
+
+###
+
+### 7. Intentar crear producto inválido - Validación (400 Bad Request)
+POST http://localhost:8080/api/productos
+Content-Type: application/json
+
+{
+  "nombre": "",
+  "descripcion": "Precio negativo de prueba",
+  "precio": -500,
+  "categoriaId": 1,
+  "stock": -2
+}
+
+###
+
+### 8. Actualizar un producto existente (200 OK)
+PUT http://localhost:8080/api/productos/1
+Content-Type: application/json
+
+{
+  "nombre": "Café Colombiano Premium 500g (Edición Especial)",
+  "descripcion": "Café tostado molido de origen colombiano, notas achocolatadas",
+  "precio": 15900.0,
+  "categoriaId": 1,
+  "imagenUrl": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e",
+  "stock": 45
+}
+
+###
+
+### 9. Actualizar únicamente el stock de un producto (200 OK)
+PATCH http://localhost:8080/api/productos/1/stock
+Content-Type: application/json
+
+{
+  "stock": 60
+}
+
+###
+
+### 10. Eliminar un producto por ID (204 No Content)
+DELETE http://localhost:8080/api/productos/5
+
+###
+
+### 11. Listar todas las categorías (200 OK)
+GET http://localhost:8080/api/categorias
+Accept: application/json
+
+###
+
+### 12. Crear una nueva categoría (201 Created)
+POST http://localhost:8080/api/categorias
+Content-Type: application/json
+
+{
+  "nombre": "Infusiones",
+  "descripcion": "Tés en hebras y yerba mate orgánica"
+}
+
+###
+
+### 13. Crear un pedido válido - Descuenta stock y calcula total (201 Created)
+POST http://localhost:8080/api/pedidos
+Content-Type: application/json
+
+{
+  "usuarioId": 1,
+  "itemsPedido": [
+    { "productoId": 1, "cantidad": 2 },
+    { "productoId": 3, "cantidad": 1 }
+  ]
+}
+
+###
+
+### 14. Intentar crear pedido sin stock suficiente (400 Bad Request)
+POST http://localhost:8080/api/pedidos
+Content-Type: application/json
+
+{
+  "usuarioId": 1,
+  "itemsPedido": [
+    { "productoId": 4, "cantidad": 999 }
+  ]
+}
+
+###
+
+### 15. Listar todos los pedidos (200 OK)
+GET http://localhost:8080/api/pedidos
+Accept: application/json
+
+###
+
+### 16. Cambiar estado de un pedido (200 OK)
+PATCH http://localhost:8080/api/pedidos/1/estado
+Content-Type: application/json
+
+{
+  "estado": "CONFIRMADO"
+}
+
+###
+
+### 17. Cancelar un pedido - Restaura el stock automáticamente (200 OK)
+PATCH http://localhost:8080/api/pedidos/1/estado
+Content-Type: application/json
+
+{
+  "estado": "CANCELADO"
+}
+
+###
+
+### 18. Consultar historial de pedidos de un usuario (200 OK)
+GET http://localhost:8080/api/usuarios/1/pedidos
+Accept: application/json
